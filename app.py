@@ -4,7 +4,7 @@ import joblib
 
 st.set_page_config(page_title="Ford Car Price Predictor", page_icon="🚗", layout="centered")
 
-# Load model, scaler, and training columns
+
 model = joblib.load("ford_price_model.pkl")
 scaler = joblib.load("ford_scaler.pkl")
 columns = joblib.load("ford_columns.pkl")
@@ -12,7 +12,7 @@ columns = joblib.load("ford_columns.pkl")
 st.title("🚗 Ford Car Price Predictor")
 st.write("Enter the Ford car details below to estimate the price.")
 
-# Input fields
+
 model_name = st.selectbox(
     "Model",
     [
@@ -43,7 +43,7 @@ engineSize = st.number_input("Engine Size", min_value=0.0, max_value=10.0, value
 
 if st.button("Predict Price"):
 
-    # Base input
+    
     input_df = pd.DataFrame([{
         "year": year,
         "mileage": mileage,
@@ -55,24 +55,24 @@ if st.button("Predict Price"):
         "fuelType": fuelType
     }])
 
-    # Feature engineering (must match notebook exactly)
+    
     input_df["car_age"] = 2026 - input_df["year"]
     input_df["car_age"] = input_df["car_age"].replace(0, 1)
 
     input_df["mileage_per_year"] = input_df["mileage"] / input_df["car_age"]
     input_df["tax_per_engine"] = input_df["tax"] / (input_df["engineSize"] + 0.1)
 
-    # One-hot encoding (must match notebook exactly)
+    
     input_df = pd.get_dummies(
         input_df,
         columns=["model", "transmission", "fuelType"],
         drop_first=True
     )
 
-    # Match exact training columns
+    
     input_df = input_df.reindex(columns=columns, fill_value=0)
 
-    # Scale only the numeric columns used during training
+    
     num_cols = [
         "year",
         "mileage",
@@ -86,11 +86,11 @@ if st.button("Predict Price"):
 
     input_df[num_cols] = scaler.transform(input_df[num_cols])
 
-    # Prediction
+    
     prediction = model.predict(input_df)[0]
 
     st.success(f"💰 Estimated Price: £{prediction:,.0f}")
 
-    # Optional debug
+    
     with st.expander("See processed input"):
         st.dataframe(input_df)
