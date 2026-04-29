@@ -52,6 +52,9 @@ This project focuses on predicting Ford car prices using Machine Learning based 
   - Engine Size  
 
 ---
+## Wakatime
+
+<img width="1920" height="939" alt="2026-04-23 (2)" src="https://github.com/user-attachments/assets/c74fd16e-3d79-4210-9151-4e95d1256fd7" />
 
 ## Author
 Pratick Som
